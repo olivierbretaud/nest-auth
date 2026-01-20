@@ -70,9 +70,11 @@ pnpm install
 Configurer ensuite les variables d’environnement (fichier `.env` à la racine, par exemple) :
 
 ```env
-DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/nest_auth?schema=public"
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/nest_auth_db"
 JWT_SECRET="change-me"
 NODE_ENV="development"
+POSTMAN_API_KEY="api-key"
+POSTMAN_COLLECTION_UID="collectionId"
 ```
 
 Adapter `DATABASE_URL`, `JWT_SECRET` et les autres variables à votre contexte.
