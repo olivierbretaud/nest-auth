@@ -1,7 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { Body, Controller, Get, Req, Post, UseGuards, ConflictException } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
-// biome-ignore lint:useImportType
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RolesGuard } from '../auth/roles.guard';
@@ -20,7 +19,6 @@ export class UsersController {
   @Roles(UserRole.ADMIN)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Liste des utilisateurs' })
-  @ApiResponse({ status: 200, description: 'Liste retournée' })
   async findAll() {
     const users = await this.usersService.findAll();
     return { users };
