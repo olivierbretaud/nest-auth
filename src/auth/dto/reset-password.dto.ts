@@ -1,7 +1,11 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, MinLength, Matches } from 'class-validator';
 
 export class ResetPasswordDto {
   @IsNotEmpty()
+  @ApiProperty({
+    example: 'token',
+  })
   token: string;
 
   @IsNotEmpty()
@@ -13,5 +17,8 @@ export class ResetPasswordDto {
         'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&)',
     },
   )
+  @ApiProperty({
+    example: 'P@ssword123456',
+  })
   newPassword: string;
 }
