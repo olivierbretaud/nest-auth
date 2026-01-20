@@ -1,11 +1,12 @@
 import * as bcrypt from 'bcrypt';
-
+import * as dotenv from 'dotenv';
 import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { RequestResetPasswordDto } from './dto/request-reset-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+
+dotenv.config();
 
 @Injectable()
 export class AuthService {

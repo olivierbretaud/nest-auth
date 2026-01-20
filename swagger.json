@@ -16,8 +16,25 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
+                }
+              }
+            }
           }
         },
         "summary": "User login",
@@ -45,6 +62,7 @@
             "description": ""
           }
         },
+        "summary": "User request reset password",
         "tags": [
           "Auth"
         ]
@@ -69,6 +87,7 @@
             "description": ""
           }
         },
+        "summary": "User reset password",
         "tags": [
           "Auth"
         ]
@@ -80,7 +99,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Liste retournée"
+            "description": ""
           }
         },
         "security": [
@@ -187,13 +206,69 @@
           "password"
         ]
       },
+      "loginResponseDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "token"
+          }
+        },
+        "required": [
+          "access_token"
+        ]
+      },
+      "ErrorUnauthorizedDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid credentials"
+          },
+          "error": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message",
+          "error"
+        ]
+      },
       "RequestResetPasswordDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Adresse email utilisateur",
+            "example": "johndoe@gmail.com"
+          }
+        },
+        "required": [
+          "email"
+        ]
       },
       "ResetPasswordDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "token"
+          },
+          "newPassword": {
+            "type": "string",
+            "example": "P@ssword123456"
+          }
+        },
+        "required": [
+          "token",
+          "newPassword"
+        ]
       },
       "CreateUserDto": {
         "type": "object",
