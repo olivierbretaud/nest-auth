@@ -34,10 +34,7 @@ export class AuthService {
     
     // Pour la sécurité, on ne révèle pas si l'email existe ou non
     if (!user) {
-      // On retourne quand même un succès pour ne pas révéler si l'email existe
-      return {
-        message: 'Si cet email existe, un lien de réinitialisation a été envoyé.',
-      };
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     // Générer un token JWT avec expiration de 15 minutes
@@ -56,7 +53,7 @@ export class AuthService {
     console.log(`📧 Email à envoyer avec le lien: /auth/reset-password?token=${resetToken}`);
 
     return {
-      message: 'Si cet email existe, un lien de réinitialisation a été envoyé.',
+      message: 'Un lien de réinitialisation a été envoyé.',
       // En développement, on peut retourner le token (à retirer en production)
       ...(process.env.NODE_ENV !== 'production' && { resetToken }),
     };

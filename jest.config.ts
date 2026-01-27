@@ -1,11 +1,14 @@
 import type { Config } from 'jest';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const config: Config = {
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: '.',
   setupFiles: ['dotenv/config'],
   testEnvironment: 'node',
-
+  preset: 'ts-jest',
   testMatch: [
     '**/*.spec.ts',
     '**/*.e2e-spec.ts',
@@ -24,4 +27,4 @@ const config: Config = {
   verbose: true,
 };
 
-export default config;
+export = config;
