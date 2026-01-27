@@ -28,7 +28,6 @@ pipeline {
           set -e
 
           echo "Enable Corepack"
-          corepack enable
           corepack prepare pnpm@latest --activate
 
           echo "Install dependencies"
