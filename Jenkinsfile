@@ -24,34 +24,31 @@ pipeline {
         }
       }
       steps {
-        sh '''
-          set -e
+      sh '''
+        set -e
 
-          echo "Enable Corepack"
-          corepack prepare pnpm@latest --activate
+        echo "Enable Corepack"
+        corepack enable
+        corepack prepare pnpm@latest --activate
 
-          echo "Install pnpm locally"
-          npm install pnpm --prefix ~/.local
-          export PATH="$HOME/.local/bin:$PATH"
+        echo "Check pnpm version"
+        pnpm -v
 
-          echo "Check pnpm version"
-          pnpm -v
+        echo "Install dependencies"
+        pnpm install --frozen-lockfile
 
-          echo "Install dependencies"
-          pnpm install --frozen-lockfile
+        echo "Generate Prisma client"
+        pnpm prisma generate
 
-          echo "Generate Prisma client"
-          pnpm prisma generate
+        echo "Run tests"
+        pnpm test
 
-          echo "Run tests"
-          pnpm test
+        echo "Build project"
+        pnpm build
 
-          echo "Build project"
-          pnpm build
-
-          echo "Check dist/"
-          ls dist/
-        '''
+        echo "Check dist/"
+        ls dist/
+      '''
       }
     }
 
