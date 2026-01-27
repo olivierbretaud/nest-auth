@@ -6,6 +6,15 @@ pipeline {
   }
 
   stages {
+    stage('Agent check') {
+      steps {
+        sh '''
+          echo "Node: $(hostname)"
+          which docker || echo "❌ docker absent"
+          docker version || true
+        '''
+      }
+    }
 
     stage('Install / Test / Build') {
       agent {
