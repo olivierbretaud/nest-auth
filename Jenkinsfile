@@ -30,6 +30,13 @@ pipeline {
           echo "Enable Corepack"
           corepack prepare pnpm@latest --activate
 
+          echo "Install pnpm locally"
+          npm install pnpm --prefix ~/.local
+          export PATH="$HOME/.local/bin:$PATH"
+
+          echo "Check pnpm version"
+          pnpm -v
+
           echo "Install dependencies"
           pnpm install --frozen-lockfile
 
