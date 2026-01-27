@@ -1,5 +1,5 @@
 pipeline {
-  agent none
+  agent { label 'docker' }
 
   environment {
     IMAGE_NAME = "nest-prisma-node22"
@@ -8,9 +8,10 @@ pipeline {
   stages {
 
     stage('Install / Test / Build') {
-      agent {
+     agent {
         docker {
           image 'node:22-alpine'
+          reuseNode true   // ⭐ très important
         }
       }
       steps {
