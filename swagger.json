@@ -58,8 +58,25 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPassworResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
+                }
+              }
+            }
           }
         },
         "summary": "User request reset password",
@@ -251,6 +268,23 @@
         },
         "required": [
           "email"
+        ]
+      },
+      "ResetPassworResponseDto": {
+        "type": "object",
+        "properties": {
+          "resetToken": {
+            "type": "string",
+            "example": "token"
+          },
+          "message": {
+            "type": "string",
+            "example": "Un lien de réinitialisation a été envoyé."
+          }
+        },
+        "required": [
+          "resetToken",
+          "message"
         ]
       },
       "ResetPasswordDto": {

@@ -10,16 +10,17 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main",
     "lint": "biome lint .",
     "format": "biome format . --write",
     "check": "biome check . --write",
-    "test": "jest",
+    "test": "jest --config jest.config.ts",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "sync:postman": "ts-node scripts/sync-postman.ts"
+    "sync:postman": "ts-node scripts/sync-postman.ts",
+    "db:deploy": "npx prisma migrate deploy && npx prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

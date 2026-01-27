@@ -2,11 +2,11 @@ import { Body, Controller, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 
 import { Throttle } from "@nestjs/throttler";
-import { RequestResetPasswordDto } from "./dto/request-reset-password.dto";
+import { RequestResetPasswordDto, ResetPassworResponseDto } from "./dto/request-reset-password.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
 import { loginDto, loginResponseDto } from "./dto/login.dto";
 import { ApiBody, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
-import { ApiErrors } from "@/swagger/errors";
+import { ApiErrors } from "../swagger/errors";
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +25,8 @@ export class AuthController {
   @Post('request-reset-password')
   @ApiOperation({ summary: "User request reset password" })
   @Throttle({ default: { limit: 3, ttl: 60000 } }) // 3 demandes par minute pour éviter le spam
+  @ApiOkResponse({ type: ResetPassworResponseDto})
+  @ApiErrors('UNAUTHORIZED')
   async requestPasswordReset(@Body() requestResetPasswordDto: RequestResetPasswordDto) {
     return this.authService.requestPasswordReset(requestResetPasswordDto);
   }

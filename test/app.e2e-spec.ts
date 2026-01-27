@@ -1,4 +1,3 @@
-// biome-ignore lint:useImportType: <explanation>
 import { INestApplication } from '@nestjs/common';
 import { Test, type TestingModule } from '@nestjs/testing';
 import request from 'supertest';
