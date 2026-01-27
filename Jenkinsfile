@@ -6,28 +6,15 @@ pipeline {
   }
 
   stages {
-
-    stage('Install / Test / Build') {
-     agent {
-        docker {
-          image 'node:22-alpine'
-          reuseNode true   // ⭐ très important
-        }
-      }
+    stage('Docker Build') {
       steps {
-        sh 'npm install -g pnpm'
-        sh 'pnpm install --frozen-lockfile'
-        sh 'pnpm prisma generate'
-        sh 'pnpm test'
-        sh 'pnpm build'
-        sh 'ls dist/'
+        sh 'docker build -t $IMAGE_NAME .'
       }
     }
 
-    stage('Docker Build') {
-      agent any   // ← agent Jenkins avec Docker installé
+    stage('Test image') {
       steps {
-        sh 'docker build -t $IMAGE_NAME .'
+        sh 'docker run --rm $IMAGE_NAME node dist/main.js'
       }
     }
   }
