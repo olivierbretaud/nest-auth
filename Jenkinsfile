@@ -20,16 +20,32 @@ pipeline {
       agent {
         docker {
           image 'node:22-alpine'
-          reuseNode true   // ⭐ très important
+          reuseNode true
         }
       }
       steps {
-        sh 'npm install -g pnpm'
-        sh 'pnpm install --frozen-lockfile'
-        sh 'pnpm prisma generate'
-        sh 'pnpm test'
-        sh 'pnpm build'
-        sh 'ls dist/'
+        sh '''
+          set -e
+
+          echo "Enable Corepack"
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+          echo "Install dependencies"
+          pnpm install --frozen-lockfile
+
+          echo "Generate Prisma client"
+          pnpm prisma generate
+
+          echo "Run tests"
+          pnpm test
+
+          echo "Build project"
+          pnpm build
+
+          echo "Check dist/"
+          ls dist/
+        '''
       }
     }
 
