@@ -11,46 +11,57 @@ pipeline {
     NODE_ENV = 'test'
   }
 
+  // Définir les variables pour tout le pipeline
+  options {
+    skipDefaultCheckout true
+  }
+
   stages {
-    stage('Debug env') {
+
+    stage('Checkout') {
       steps {
-        withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
-          sh 'echo "DATABASE_URL=$DATABASE_URL"'
-          sh 'env | grep DATABASE_URL'
+        checkout scm
+      }
+    }
+
+    stage('Prepare Env') {
+      steps {
+        // withEnv au niveau pipeline pour que tous les sh voient les variables
+        script {
+          env.DATABASE_URL = env.DATABASE_URL
+          env.NODE_ENV = env.NODE_ENV
         }
       }
     }
 
-
-      stage('Install') {
+    stage('Debug Env') {
       steps {
-        withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
-          sh 'npm ci'
-        }
+        sh 'echo "DATABASE_URL=$DATABASE_URL"'
+        sh 'env | grep DATABASE_URL'
       }
     }
 
-    stage('Generate Prisma') {
+    stage('Install dependencies') {
       steps {
-        withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
-          sh 'npx prisma generate'
-        }
+        sh 'npm ci'
       }
     }
 
-    stage('Migrate DB') {
+    stage('Prisma Generate') {
       steps {
-        withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
-          sh 'npx prisma migrate deploy'
-        }
+        sh 'npx prisma generate'
       }
     }
 
-    stage('Test') {
+    stage('Prisma Migrate') {
       steps {
-        withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
-          sh 'npm test'
-        }
+        sh 'npx prisma migrate deploy'
+      }
+    }
+
+    stage('Run Tests') {
+      steps {
+        sh 'npm test'
       }
     }
   }
