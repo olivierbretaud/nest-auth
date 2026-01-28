@@ -76,7 +76,7 @@ importers:
         version: 5.0.1(express@5.2.1)
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.3.10
+        specifier: 2.3.10
         version: 2.3.10
       '@eslint/eslintrc':
         specifier: ^3.2.0
