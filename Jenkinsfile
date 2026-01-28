@@ -54,7 +54,7 @@ pipeline {
       steps {
           withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
               echo "Running linter..."
-              sh 'npm run lint'
+              sh 'npx biome lint'
 
               echo "Running tests..."
               sh 'npm test'
