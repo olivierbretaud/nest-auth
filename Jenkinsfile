@@ -1,62 +1,92 @@
 pipeline {
-  agent { label 'docker' }   // 🔒 agent garanti avec Docker
-
-  environment {
-    IMAGE_NAME = "nest-prisma-node22"
+  agent {
+    docker {
+      image 'node:22-alpine'
+      args "-e DATABASE_URL=${env.DATABASE_URL} -e NODE_ENV=${env.NODE_ENV} --network container:jenkins"
+    }
   }
 
+  environment {
+    DATABASE_URL = credentials('DATABASE_URL')
+    NODE_ENV = 'test'
+  }
+
+
   stages {
-    stage('Agent check') {
+
+    stage('Setup tools') {
       steps {
         sh '''
-          echo "Node: $(hostname)"
-          which docker || echo "❌ docker absent"
-          docker version || true
+          apk add --no-cache git bash
+          npm install -g pnpm
+
+          git --version
+          pnpm --version
         '''
       }
     }
 
-    stage('Install / Test / Build') {
-      agent {
-        docker {
-          image 'node:22-alpine'
-          args '--user root'  // <-- Exécuter en root
-          reuseNode true
-        }
-      }
+    stage('Debug Credentials') {
       steps {
-      sh '''
-        set -e
-
-        echo "Enable Corepack"
-        corepack enable
-        corepack prepare pnpm@latest --activate
-
-        echo "Check pnpm version"
-        pnpm -v
-
-        echo "Install dependencies"
-        pnpm install --frozen-lockfile
-
-        echo "Generate Prisma client"
-        pnpm prisma generate
-
-        echo "Run tests"
-        pnpm test
-
-        echo "Build project"
-        pnpm build
-
-        echo "Check dist/"
-        ls dist/
-      '''
+        script {
+          // Test 1 : Vérifier si le credential existe
+          withCredentials([string(credentialsId: 'DATABASE_URL', variable: 'DB_URL')]) {
+            sh '''
+              echo "Length of DB_URL: ${#DB_URL}"
+              if [ -z "$DB_URL" ]; then
+                echo "ERROR: DB_URL is empty!"
+              else
+                echo "SUCCESS: DB_URL is set (length: ${#DB_URL} characters)"
+              fi
+            '''
+          }
+        }
       }
     }
 
-    stage('Docker Build') {
+    stage('Afficher le dernier commit') {
       steps {
-        sh 'docker build -t $IMAGE_NAME .'
+        sh '''
+          echo "Dernier commit :"
+          git log -1 --pretty=format:"%h - %an : %s"
+        '''
       }
+    }
+
+    stage('Install & Prisma') {
+      steps {
+            withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=test"]) {
+                // Debug pour vérifier que la variable est bien passée
+                sh 'echo "DATABASE_URL=$DATABASE_URL"'
+
+                // Installer les dépendances
+                sh 'pnpm install --frozen-lockfile'
+
+                // Générer Prisma
+                sh 'npx prisma generate'
+
+                // Appliquer les migrations
+                sh 'npx prisma migrate deploy'
+            }
+      }
+    }
+
+    stage('Lint & Test') {
+      steps {
+          withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
+              echo "Running linter..."
+              sh 'npx biome lint'
+
+              echo "Running tests..."
+              sh 'npm test'
+          }
+      }
+    }
+  }
+
+  post {
+    always {
+      sh 'npm cache clean --force'
     }
   }
 }

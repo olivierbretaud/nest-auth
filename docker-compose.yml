@@ -1,6 +1,21 @@
 version: "3.8"
 
 services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    container_name: jenkins
+    user: root
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:15
     env_file:
@@ -30,3 +45,4 @@ services:
       - "3000:3000"
 volumes:
   pgdata:
+  jenkins_home:

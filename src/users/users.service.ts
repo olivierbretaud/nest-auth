@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-// biome-ignore lint:useImportType
+
 import { PrismaService } from "../../prisma/prisma.service";
 import type { CreateUserDto } from "./dto/create-user.dto";
 
