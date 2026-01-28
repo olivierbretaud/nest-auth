@@ -13,8 +13,6 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - postgres
 
   postgres:
     image: postgres:15
