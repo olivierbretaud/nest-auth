@@ -56,17 +56,17 @@ pipeline {
     stage('Install & Prisma') {
       steps {
             withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=test"]) {
-                // Debug pour vérifier que la variable est bien passée
-                sh 'echo "DATABASE_URL=$DATABASE_URL"'
+              // Debug pour vérifier que la variable est bien passée
+              sh 'echo "DATABASE_URL=$DATABASE_URL"'
 
-                // Installer les dépendances
-                sh 'pnpm install --frozen-lockfile'
+              // Installer les dépendances
+              sh 'pnpm install --frozen-lockfile'
 
-                // Générer Prisma
-                sh 'npx prisma generate'
+              // Générer Prisma
+              sh 'npx prisma generate'
 
                 // Appliquer les migrations
-                sh 'npx prisma migrate deploy'
+              sh 'npx prisma migrate deploy'
             }
       }
     }
