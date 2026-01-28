@@ -17,6 +17,23 @@ pipeline {
   }
 
   stages {
+    stage('Debug Credentials') {
+      steps {
+        script {
+          // Test 1 : Vérifier si le credential existe
+          withCredentials([string(credentialsId: 'DATABASE_URL', variable: 'DB_URL')]) {
+            sh '''
+              echo "Length of DB_URL: ${#DB_URL}"
+              if [ -z "$DB_URL" ]; then
+                echo "ERROR: DB_URL is empty!"
+              else
+                echo "SUCCESS: DB_URL is set (length: ${#DB_URL} characters)"
+              fi
+            '''
+          }
+        }
+      }
+    }
 
    stage('Install & Prisma') {
     steps {
