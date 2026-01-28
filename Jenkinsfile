@@ -1,63 +1,46 @@
 pipeline {
-  agent { label 'docker' }   // 🔒 agent garanti avec Docker
+  agent {
+    docker {
+      image 'node:22-alpine'
+      args '--network container:jenkins'
+    }
+  }
 
   environment {
-    IMAGE_NAME = "nest-prisma-node22"
     DATABASE_URL = credentials('DATABASE_URL')
+    NODE_ENV = 'test'
   }
 
   stages {
-    stage('Agent check') {
+
+    stage('Install') {
       steps {
-        sh '''
-          echo "Node: $(hostname)"
-          which docker || echo "❌ docker absent"
-          docker version || true
-        '''
+        sh 'npm ci'
       }
     }
 
-    stage('Install / Test / Build') {
-      agent {
-        docker {
-          image 'node:22-alpine'
-          args '--user root'  // <-- Exécuter en root
-          reuseNode true
-        }
-      }
+    stage('Generate Prisma') {
       steps {
-      sh '''
-        set -e
-
-        echo "Enable Corepack"
-        corepack enable
-        corepack prepare pnpm@latest --activate
-
-        echo "Check pnpm version"
-        pnpm -v
-
-        echo "Install dependencies"
-        pnpm install --frozen-lockfile
-
-        echo "Generate Prisma client"
-        pnpm prisma generate
-
-        echo "Run tests"
-        pnpm test
-
-        echo "Build project"
-        pnpm build
-
-        echo "Check dist/"
-        ls dist/
-      '''
+        sh 'npx prisma generate'
       }
     }
 
-    stage('Docker Build') {
+    stage('Migrate DB') {
       steps {
-        sh 'docker build -t $IMAGE_NAME .'
+        sh 'npx prisma migrate deploy'
       }
+    }
+
+    stage('Test') {
+      steps {
+        sh 'npm test'
+      }
+    }
+  }
+
+  post {
+    always {
+      sh 'npm cache clean --force'
     }
   }
 }
