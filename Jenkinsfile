@@ -35,23 +35,34 @@ pipeline {
       }
     }
 
-   stage('Install & Prisma') {
-    steps {
-        withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=test"]) {
-            // Debug pour vérifier que la variable est bien passée
-            sh 'echo "DATABASE_URL=$DATABASE_URL"'
+    stage('Install & Prisma') {
+      steps {
+            withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=test"]) {
+                // Debug pour vérifier que la variable est bien passée
+                sh 'echo "DATABASE_URL=$DATABASE_URL"'
 
-            // Installer les dépendances
-            sh 'npm ci'
+                // Installer les dépendances
+                sh 'npm ci'
 
-            // Générer Prisma
-            sh 'npx prisma generate'
+                // Générer Prisma
+                sh 'npx prisma generate'
 
-            // Appliquer les migrations
-            sh 'npx prisma migrate deploy'
+                // Appliquer les migrations
+                sh 'npx prisma migrate deploy'
+            }
+      }
+      stage('Lint & Test') {
+        steps {
+            withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
+                echo "Running linter..."
+                sh 'npm run lint'
+
+                echo "Running tests..."
+                sh 'npm test'
+            }
         }
+      }
     }
-  }
   }
 
   post {
