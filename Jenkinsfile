@@ -14,6 +14,18 @@ pipeline {
 
   stages {
 
+    stage('Setup tools') {
+      steps {
+        sh '''
+          apk add --no-cache git bash
+          npm install -g pnpm
+
+          git --version
+          pnpm --version
+        '''
+      }
+    }
+
     stage('Debug Credentials') {
       steps {
         script {
@@ -32,6 +44,15 @@ pipeline {
       }
     }
 
+    stage('Afficher le dernier commit') {
+      steps {
+        sh '''
+          echo "Dernier commit :"
+          git log -1 --pretty=format:"%h - %an : %s"
+        '''
+      }
+    }
+
     stage('Install & Prisma') {
       steps {
             withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=test"]) {
@@ -39,7 +60,7 @@ pipeline {
                 sh 'echo "DATABASE_URL=$DATABASE_URL"'
 
                 // Installer les dépendances
-                sh 'npm ci'
+                sh 'pnpm install --frozen-lockfile'
 
                 // Générer Prisma
                 sh 'npx prisma generate'
