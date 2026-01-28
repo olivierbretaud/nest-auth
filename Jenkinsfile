@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'node:22-alpine-git'
+      image 'node:22-alpine'
       args "-e DATABASE_URL=${env.DATABASE_URL} -e NODE_ENV=${env.NODE_ENV} --network container:jenkins"
     }
   }
@@ -11,28 +11,8 @@ pipeline {
     NODE_ENV = 'test'
   }
 
-  // Définir les variables pour tout le pipeline
-  options {
-    skipDefaultCheckout true
-  }
 
   stages {
-    stage('Checkout') {
-      steps {
-        // On récupère le code puisque skipDefaultCheckout = true
-        checkout scm
-      }
-    }
-
-    stage('Afficher le dernier commit') {
-      steps {
-        // Récupérer le dernier commit et l'afficher
-        sh '''
-          echo "Dernier commit :"
-          git log -1 --pretty=format:"%h - %an : %s"
-        '''
-      }
-    }
 
     stage('Debug Credentials') {
       steps {
