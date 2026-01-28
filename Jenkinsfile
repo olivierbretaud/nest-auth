@@ -12,10 +12,16 @@ pipeline {
   }
 
   stages {
+    stage('Debug env') {
+      steps {
+        sh 'echo "DATABASE_URL=$DATABASE_URL"'
+        sh 'env | grep DATABASE_URL'
+      }
+    }
 
     stage('Install') {
       steps {
-        sh 'npm install'
+        sh 'npm ci'
       }
     }
 
