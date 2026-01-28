@@ -55,9 +55,10 @@ pipeline {
 
     stage('Install & Prisma') {
       steps {
-            withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=test"]) {
-              // Debug pour vérifier que la variable est bien passée
-              sh 'echo "DATABASE_URL=$DATABASE_URL"'
+          withCredentials([string(credentialsId: 'DATABASE_URL', variable: 'DATABASE_URL')]) {
+            withEnv(["NODE_ENV=test"]) {
+              // NE PAS echo la valeur réelle du secret !
+              sh 'echo "DATABASE_URL length: ${#DATABASE_URL}"'  // seulement pour debug
 
               // Installer les dépendances
               sh 'pnpm install --frozen-lockfile'
@@ -65,21 +66,24 @@ pipeline {
               // Générer Prisma
               sh 'npx prisma generate'
 
-                // Appliquer les migrations
+              // Appliquer les migrations
               sh 'npx prisma migrate deploy'
             }
+        }
       }
     }
 
     stage('Lint & Test') {
       steps {
-          withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
-              echo "Running linter..."
-              sh 'npx biome lint'
+        withCredentials([string(credentialsId: 'DATABASE_URL', variable: 'DATABASE_URL')]) {
+          withEnv(["NODE_ENV=${env.NODE_ENV}"]) {
+            echo "Running linter..."
+            sh 'npx biome lint'
 
-              echo "Running tests..."
-              sh 'npm test'
+            echo "Running tests..."
+            sh 'npm test'
           }
+        }
       }
     }
   }
