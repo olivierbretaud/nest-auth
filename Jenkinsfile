@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'node:22-alpine'
-      args '--network container:jenkins'
+      args 'args "-e DATABASE_URL=${env.DATABASE_URL} -e NODE_ENV=test --network container:jenkins'
     }
   }
 
