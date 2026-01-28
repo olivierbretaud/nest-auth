@@ -51,16 +51,17 @@ pipeline {
                 sh 'npx prisma migrate deploy'
             }
       }
-      stage('Lint & Test') {
-        steps {
-            withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
-                echo "Running linter..."
-                sh 'npm run lint'
+    }
 
-                echo "Running tests..."
-                sh 'npm test'
-            }
-        }
+    stage('Lint & Test') {
+      steps {
+          withEnv(["DATABASE_URL=${env.DATABASE_URL}", "NODE_ENV=${env.NODE_ENV}"]) {
+              echo "Running linter..."
+              sh 'npm run lint'
+
+              echo "Running tests..."
+              sh 'npm test'
+          }
       }
     }
   }
