@@ -17,6 +17,23 @@ pipeline {
   }
 
   stages {
+    stage('Checkout') {
+      steps {
+        // On récupère le code puisque skipDefaultCheckout = true
+        checkout scm
+      }
+    }
+
+    stage('Afficher le dernier commit') {
+      steps {
+        // Récupérer le dernier commit et l'afficher
+        sh '''
+          echo "Dernier commit :"
+          git log -1 --pretty=format:"%h - %an : %s"
+        '''
+      }
+    }
+
     stage('Debug Credentials') {
       steps {
         script {
