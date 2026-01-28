@@ -3,6 +3,7 @@ pipeline {
 
   environment {
     IMAGE_NAME = "nest-prisma-node22"
+    DATABASE_URL = credentials('DATABASE_URL')
   }
 
   stages {
