@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsEmail } from 'class-validator';
-import { ApiEmailProperty } from '../../swagger/email.property';
+import { ApiEmailProperty } from '../../common/swagger/email.property';
 
 
 export class loginDto {

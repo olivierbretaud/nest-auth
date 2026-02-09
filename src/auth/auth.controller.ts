@@ -9,7 +9,7 @@ import {
 import { ResetPasswordDto, ResetPassworResponseDto } from "./dto/reset-password.dto";
 import { loginDto, loginResponseDto } from "./dto/login.dto";
 import { ApiBody, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
-import { ApiErrors } from "../swagger/errors";
+import { ApiErrors } from "../common/swagger/errors";
 
 @Controller('auth')
 export class AuthController {

@@ -1,4 +1,4 @@
-import { ApiEmailProperty } from '../../swagger/email.property';
+import { ApiEmailProperty } from '../../common/swagger/email.property';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
