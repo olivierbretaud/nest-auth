@@ -79,10 +79,10 @@ pipeline {
           withEnv(["NODE_ENV=${env.NODE_ENV}"]) {
 
             echo "Running Formatter..."
-            sh 'npx biome check .'
+            sh 'npx biome format . --write'
 
             echo "Running linter..."
-            sh 'npx biome lint'
+            sh 'npx biome lint .'
 
             echo "Running tests..."
             sh 'npm test'
