@@ -30,7 +30,6 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email }, select: selectUser });
   }
 
-
   findPasswordByEmail(email: string) {
     return this.prisma.user.findUnique({ where: { email }, select: {
       ...selectUser,
@@ -67,5 +66,9 @@ export class UsersService {
       data: updateUserDto,
       select: selectUser,
     });
+  }
+
+  delete(id: number) {
+    return this.prisma.user.delete({ where: { id } });
   }
 }

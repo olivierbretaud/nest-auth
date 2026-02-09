@@ -31,7 +31,6 @@ export class AuthService {
 
   async requestPasswordReset(requestResetPasswordDto: RequestResetPasswordDto) {
     const user = await this.usersService.findByEmail(requestResetPasswordDto.email);
-    console.log(user, requestResetPasswordDto.email)
     // Pour la sécurité, on ne révèle pas si l'email existe ou non
     if (!user) {
       throw new NotFoundException('User not found');

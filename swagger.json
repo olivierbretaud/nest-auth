@@ -313,7 +313,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Utilisateur modifié avec succès",
             "content": {
               "application/json": {
@@ -380,6 +380,70 @@
           }
         ],
         "summary": "Mise à jour d'un utilisateur",
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Utilisateur supprimer avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteUserResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForbiddenDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFoundDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Suppresion d'un utilisateur",
         "tags": [
           "Users"
         ]
@@ -742,6 +806,23 @@
           "statusCode",
           "message",
           "error"
+        ]
+      },
+      "DeleteUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "message": {
+            "type": "string",
+            "example": "User successfully deleted."
+          }
+        },
+        "required": [
+          "id",
+          "message"
         ]
       }
     }

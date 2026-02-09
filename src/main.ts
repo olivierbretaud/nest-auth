@@ -63,7 +63,7 @@ async function bootstrap() {
 
 
   writeFileSync('./swagger.json', JSON.stringify(document, null, 2));
-  console.log('Fichier Swagger généré')
+  console.log('📘 Fichier Swagger généré')
 
   await app.listen(port);
 

@@ -51,3 +51,11 @@ export class UserResponseDto {
   @ApiProperty({ example: '2024-01-01T10:00:00.000Z' })
   updatedAt: Date;
 }
+
+export class DeleteUserResponseDto {
+  @ApiProperty({ example: 1 })
+  id: number;
+
+  @ApiProperty({ example: 'User successfully deleted.' })
+  message: string;
+}

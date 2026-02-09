@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Req, Post, UseGuards, ConflictException, Put, ParseIntPipe, NotFoundException, Param } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, Get, Req, Post, UseGuards, ConflictException, Put, ParseIntPipe, NotFoundException, Param, Delete } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiResponse, ApiOkResponse } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { CreateUserDto, UserResponseDto } from './dto/user.dto';
+import { CreateUserDto, DeleteUserResponseDto, UserResponseDto } from './dto/user.dto';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from './enums/user-role.enum';
@@ -67,7 +67,7 @@ export class UsersController {
   @Roles(UserRole.ADMIN)
   @ApiBearerAuth()
   @ApiOperation({ summary: "Mise à jour d'un utilisateur" })
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     description: 'Utilisateur modifié avec succès',
     type: UserResponseDto,
   })
@@ -87,5 +87,30 @@ export class UsersController {
       if (user.id !== userFound?.id && userFound?.email === updateUserDto.email) throw new ConflictException('Email already exists');
     }
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @Delete(':id')
+  @Roles(UserRole.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Suppresion d'un utilisateur" })
+  @ApiResponse({
+    description: 'Utilisateur supprimer avec succès',
+    type: DeleteUserResponseDto,
+    status: 204,
+  })
+  @ApiErrors('FORBIDDEN', 'UNAUTHORIZED', 'NOT_FOUND')
+  async delete(
+    @Param('id', ParseIntPipe
+    ) id: number,
+  ) {
+    const user = await this.usersService.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    await this.usersService.delete(id);
+    return {
+      id,
+      message: "User successfully deleted."
+    }
   }
 }
