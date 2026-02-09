@@ -1,7 +1,20 @@
 import { Injectable } from "@nestjs/common";
+import type { Prisma } from "../../generated/prisma/client";
 
 import { PrismaService } from "../../prisma/prisma.service";
-import type { CreateUserDto } from "./dto/create-user.dto";
+import type { CreateUserDto } from "./dto/user.dto";
+import { UpdateUserDto } from "./dto/user.dto";
+
+const selectUser: Prisma.UserSelect = {
+  id: true,
+  email: true,
+  firstName: true,
+  lastName: true,
+  role: true,
+  createdAt: true,
+  updatedAt: true,
+  isActive: true
+}
 
 @Injectable()
 export class UsersService {
@@ -9,40 +22,34 @@ export class UsersService {
 
   findAll() {
     return this.prisma.user.findMany({
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        isActive: true
-      }
+      select: selectUser
     });
   }
 
   findByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.user.findUnique({ where: { email }, select: selectUser });
+  }
+
+
+  findPasswordByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email }, select: {
+      ...selectUser,
+      password: true } });
+  }
+
+  findById(id: number) {
+    return this.prisma.user.findUnique({ where: { id }, select: selectUser });
   }
 
   create(createUserDto: CreateUserDto) {
     return this.prisma.user.create({
       data: {
         email: createUserDto.email,
-        password: createUserDto.password,
         firstName: createUserDto.firstName,
-        lastName: createUserDto.lastName
+        lastName: createUserDto.lastName,
+        isActive: true
       },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true
-      }
+      select: selectUser,
     });
   }
 
@@ -50,14 +57,15 @@ export class UsersService {
     return this.prisma.user.update({
       where: { id: userId },
       data: { password: hashedPassword },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        role: true,
-        updatedAt: true
-      }
+      select: selectUser,
+    });
+  }
+
+  update(userId: number, updateUserDto: UpdateUserDto ) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: updateUserDto,
+      select: selectUser,
     });
   }
 }

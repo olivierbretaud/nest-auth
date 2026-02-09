@@ -1,9 +1,10 @@
+// biome-ignore-all lint/suspicious/noExplicitAny: allow any in test mocks
 import * as dotenv from 'dotenv';
 import { Test, type TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { PrismaService } from '../../prisma/prisma.service';
-import type { CreateUserDto } from './dto/create-user.dto';
+import type { CreateUserDto } from './dto/user.dto';
 import { UserRole } from './enums/user-role.enum';
 
 dotenv.config();
@@ -67,7 +68,6 @@ describe('UsersController', () => {
 
   describe('findAll', () => {
     it('should return an object with users array', async () => {
-      // biome-ignore lint/suspicious/noExplicitAny: Mock data for testing
       jest.spyOn(service, 'findAll').mockResolvedValue(mockUsers as any);
 
       const result = await controller.findAll();
@@ -88,43 +88,69 @@ describe('UsersController', () => {
     });
   });
 
-  describe('me', () => {
-    it('should return the authenticated user from request', () => {
-      const mockUser = {
+  describe('profile', () => {
+    it('should return the authenticated user from request', async () => {
+      const mockUserPayload = {
         userId: 1,
         email: 'user@example.com',
         role: UserRole.MEMBER,
       };
 
-      // biome-ignore lint/suspicious/noExplicitAny: Mock Express Request for testing
-      const mockRequest: any = {
-        user: mockUser,
+      const userFromService = {
+        id: 1,
+        email: 'user@example.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        role: UserRole.MEMBER,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isActive: true,
       };
 
-      const result = controller.me(mockRequest);
+      jest.spyOn(service, 'findById').mockResolvedValue(userFromService as any);
 
-      expect(result).toEqual(mockUser);
+      const mockRequest: any = {
+        user: mockUserPayload,
+      };
+
+      const result = await controller.profile(mockRequest);
+
+      expect(service.findById).toHaveBeenCalledWith(1);
+      expect(result).toEqual(userFromService);
       expect(result).toBeDefined();
       if (result && typeof result === 'object' && 'email' in result) {
         expect(result.email).toBe('user@example.com');
       }
     });
 
-    it('should return user with ADMIN role', () => {
-      const mockAdminUser = {
+    it('should return user with ADMIN role', async () => {
+      const mockAdminPayload = {
         userId: 2,
         email: 'admin@example.com',
         role: 'Admin',
       };
 
-      // biome-ignore lint/suspicious/noExplicitAny: Mock Express Request for testing
-      const mockRequest: any = {
-        user: mockAdminUser,
+      const adminFromService = {
+        id: 2,
+        email: 'admin@example.com',
+        firstName: 'Jane',
+        lastName: 'Smith',
+        role: 'Admin',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isActive: true,
       };
 
-      const result = controller.me(mockRequest);
+      jest.spyOn(service, 'findById').mockResolvedValue(adminFromService as any);
 
-      expect(result).toEqual(mockAdminUser);
+      const mockRequest: any = {
+        user: mockAdminPayload,
+      };
+
+      const result = await controller.profile(mockRequest);
+
+      expect(service.findById).toHaveBeenCalledWith(2);
+      expect(result).toEqual(adminFromService);
       expect(result).toBeDefined();
       if (result && typeof result === 'object' && 'role' in result) {
         expect(result.role).toBe('Admin');
@@ -137,7 +163,6 @@ describe('UsersController', () => {
       email: 'newuser@example.com',
       firstName: 'New',
       lastName: 'User',
-      password: 'SecurePassword123!',
       role: UserRole.MEMBER,
     };
 
@@ -153,7 +178,6 @@ describe('UsersController', () => {
 
     it('should create a new user successfully', async () => {
       jest.spyOn(service, 'findByEmail').mockResolvedValue(null);
-      // biome-ignore lint/suspicious/noExplicitAny: Mock data for testing
       jest.spyOn(service, 'create').mockResolvedValue(mockCreatedUser as any);
 
       const result = await controller.create(mockCreateUserDto);
@@ -177,9 +201,7 @@ describe('UsersController', () => {
         isActive: true,
       };
 
-      // biome-ignore lint/suspicious/noExplicitAny: Mock data for testing
       jest.spyOn(service, 'findByEmail').mockResolvedValue(existingUser as any);
-      // biome-ignore lint/suspicious/noExplicitAny: Mock data for testing
       const createSpy = jest.spyOn(service, 'create').mockResolvedValue(mockCreatedUser as any);
 
       await expect(controller.create(mockCreateUserDto)).rejects.toThrow(
@@ -191,7 +213,7 @@ describe('UsersController', () => {
 
     it('should hash the password before creating user', async () => {
       jest.spyOn(service, 'findByEmail').mockResolvedValue(null);
-      // biome-ignore lint/suspicious/noExplicitAny: Mock data for testing
+
       jest.spyOn(service, 'create').mockResolvedValue(mockCreatedUser as any);
 
       await controller.create(mockCreateUserDto);
@@ -201,7 +223,6 @@ describe('UsersController', () => {
           email: mockCreateUserDto.email,
           firstName: mockCreateUserDto.firstName,
           lastName: mockCreateUserDto.lastName,
-          password: expect.not.stringContaining(mockCreateUserDto.password), // Password should be hashed
         }),
       );
     });

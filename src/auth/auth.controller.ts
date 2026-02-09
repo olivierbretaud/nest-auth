@@ -19,9 +19,10 @@ export class AuthController {
   @ApiOperation({ summary: "User login" })
   @ApiBody({ type: loginDto })
   @ApiOkResponse({ type: loginResponseDto })
-  @ApiErrors('UNAUTHORIZED')
+  @ApiErrors('UNAUTHORIZED', 'TOO_MANY_REQUESTS')
   @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 tentatives par minute pour le login (protection contre brute force)
   login(@Body() body: loginDto) {
+    console.log(body)
     return this.authService.login(body.email, body.password);
   }
 

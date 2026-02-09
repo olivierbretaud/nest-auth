@@ -5,7 +5,15 @@ import type { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from '../src/users/enums/user-role.enum';
+import { UsersService } from '../src/users/users.service';
 
+const mockUserService = {
+  findById: jest.fn().mockResolvedValue({
+    id: 1,
+    email: 'test@example.com',
+    role: UserRole.MEMBER,
+  }),
+};
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
@@ -14,7 +22,8 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })  .overrideProvider(UsersService)
+    .useValue(mockUserService).compile();
 
     app = moduleFixture.createNestApplication();
     jwtService = moduleFixture.get<JwtService>(JwtService);
@@ -38,9 +47,9 @@ describe('AppController (e2e)', () => {
     };
     const token = jwtService.sign(payload);
 
-    // Tester l'endpoint /users/me avec le Bearer token
+    // Tester l'endpoint /users/profile avec le Bearer token
     return request(app.getHttpServer())
-      .get('/users/me')
+      .get('/users/profile')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .expect((res) => {

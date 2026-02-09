@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
-import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { JwtService } from '@nestjs/jwt';
 import { RequestResetPasswordDto } from './dto/request-reset-password.dto';
@@ -16,7 +16,7 @@ export class AuthService {
   ) {}
 
   async login(email: string, password: string) {
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findPasswordByEmail(email);
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
     const valid = await bcrypt.compare(password, user.password);
@@ -31,10 +31,10 @@ export class AuthService {
 
   async requestPasswordReset(requestResetPasswordDto: RequestResetPasswordDto) {
     const user = await this.usersService.findByEmail(requestResetPasswordDto.email);
-    
+    console.log(user, requestResetPasswordDto.email)
     // Pour la sécurité, on ne révèle pas si l'email existe ou non
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new NotFoundException('User not found');
     }
 
     // Générer un token JWT avec expiration de 15 minutes
