@@ -1,830 +1,761 @@
 {
-  "openapi": "3.0.0",
-  "paths": {
-    "/api/auth/login": {
-      "post": {
-        "operationId": "AuthController_login",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/loginDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/loginResponseDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorTooManyRequestsDto"
-                }
-              }
-            }
-          }
-        },
-        "summary": "User login",
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/api/auth/request-reset-password": {
-      "post": {
-        "operationId": "AuthController_requestPasswordReset",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RequestResetPasswordDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RequestResetPassworResponseDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
-                }
-              }
-            }
-          }
-        },
-        "summary": "User request reset password",
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/api/auth/reset-password": {
-      "post": {
-        "operationId": "AuthController_resetPassword",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ResetPasswordDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResetPassworResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequestDto"
-                }
-              }
-            }
-          }
-        },
-        "summary": "User reset password",
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/api/users": {
-      "get": {
-        "operationId": "UsersController_findAll",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Liste des utilisateurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserResponseDto"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorForbiddenDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Liste des utilisateurs",
-        "tags": [
-          "Users"
-        ]
-      },
-      "post": {
-        "operationId": "UsersController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Utilisateur créé avec succès",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequestDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorForbiddenDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Création d'utilistateur",
-        "tags": [
-          "Users"
-        ]
-      }
-    },
-    "/api/users/profile": {
-      "get": {
-        "operationId": "UsersController_profile",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Utilisateur connecté",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserResponseDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Profil de l'utilistateur connecté",
-        "tags": [
-          "Users"
-        ]
-      }
-    },
-    "/api/users/{id}": {
-      "put": {
-        "operationId": "UsersController_update",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Utilisateur modifié avec succès",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequestDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorForbiddenDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFoundDto"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorConflictDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Mise à jour d'un utilisateur",
-        "tags": [
-          "Users"
-        ]
-      },
-      "delete": {
-        "operationId": "UsersController_delete",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Utilisateur supprimer avec succès",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteUserResponseDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorForbiddenDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFoundDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Suppresion d'un utilisateur",
-        "tags": [
-          "Users"
-        ]
-      }
-    },
-    "/api/hello": {
-      "get": {
-        "operationId": "AppController_getHello",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "summary": "Test de l'api",
-        "tags": [
-          "Test de l'api"
-        ]
-      }
-    }
-  },
-  "info": {
-    "title": "nest-auth",
-    "description": "Documentation de mon API nest-auth",
-    "version": "1.0",
-    "contact": {}
-  },
-  "tags": [],
-  "servers": [],
-  "components": {
-    "securitySchemes": {
-      "bearer": {
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "type": "http"
-      }
-    },
-    "schemas": {
-      "loginDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "Adresse email utilisateur",
-            "example": "johndoe@gmail.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "P@ssword123456"
-          }
-        },
-        "required": [
-          "email",
-          "password"
-        ]
-      },
-      "loginResponseDto": {
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "type": "string",
-            "example": "token"
-          }
-        },
-        "required": [
-          "access_token"
-        ]
-      },
-      "ErrorUnauthorizedDto": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 401
-          },
-          "message": {
-            "type": "string",
-            "example": "Unauthorized"
-          },
-          "error": {
-            "type": "string",
-            "example": "Unauthorized"
-          }
-        },
-        "required": [
-          "statusCode",
-          "message",
-          "error"
-        ]
-      },
-      "ErrorTooManyRequestsDto": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 429
-          },
-          "message": {
-            "type": "string",
-            "example": "ThrottlerException: Too Many Requests"
-          },
-          "error": {
-            "type": "string",
-            "example": "Too Many Requests"
-          }
-        },
-        "required": [
-          "statusCode",
-          "message",
-          "error"
-        ]
-      },
-      "RequestResetPasswordDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "Adresse email utilisateur",
-            "example": "johndoe@gmail.com"
-          }
-        },
-        "required": [
-          "email"
-        ]
-      },
-      "RequestResetPassworResponseDto": {
-        "type": "object",
-        "properties": {
-          "resetToken": {
-            "type": "string",
-            "example": "token"
-          },
-          "message": {
-            "type": "string",
-            "example": "Un lien de réinitialisation a été envoyé."
-          }
-        },
-        "required": [
-          "resetToken",
-          "message"
-        ]
-      },
-      "ResetPasswordDto": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string",
-            "example": "token"
-          },
-          "newPassword": {
-            "type": "string",
-            "example": "P@ssword123456"
-          }
-        },
-        "required": [
-          "token",
-          "newPassword"
-        ]
-      },
-      "ResetPassworResponseDto": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "example": "Mot de passe réinitialisé avec succès"
-          }
-        },
-        "required": [
-          "message"
-        ]
-      },
-      "ErrorBadRequestDto": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 400
-          },
-          "message": {
-            "type": "string",
-            "example": "Bad Request"
-          },
-          "error": {
-            "type": "string",
-            "example": "Bad Request"
-          }
-        },
-        "required": [
-          "statusCode",
-          "message",
-          "error"
-        ]
-      },
-      "UserResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1
-          },
-          "email": {
-            "type": "string",
-            "example": "john.doe@example.com"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "John"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "Doe"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "Admin",
-              "Member"
-            ],
-            "example": "Member"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2024-01-01T10:00:00.000Z"
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2024-01-01T10:00:00.000Z"
-          }
-        },
-        "required": [
-          "id",
-          "email",
-          "firstName",
-          "lastName",
-          "role",
-          "createdAt",
-          "updatedAt"
-        ]
-      },
-      "ErrorForbiddenDto": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 403
-          },
-          "message": {
-            "type": "string",
-            "example": "Forbidden"
-          },
-          "error": {
-            "type": "string",
-            "example": "Forbidden"
-          }
-        },
-        "required": [
-          "statusCode",
-          "message",
-          "error"
-        ]
-      },
-      "CreateUserDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "john@mail.com"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "John"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "Doe"
-          },
-          "role": {
-            "type": "string",
-            "example": "Member"
-          },
-          "isActive": {
-            "type": "boolean",
-            "example": true
-          }
-        },
-        "required": [
-          "email",
-          "firstName",
-          "lastName",
-          "role",
-          "isActive"
-        ]
-      },
-      "UpdateUserDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "john@mail.com"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "John"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "Doe"
-          },
-          "role": {
-            "type": "string",
-            "example": "Member"
-          },
-          "isActive": {
-            "type": "boolean",
-            "example": true
-          }
-        }
-      },
-      "ErrorNotFoundDto": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 404
-          },
-          "message": {
-            "type": "string",
-            "example": "Resource not found"
-          },
-          "error": {
-            "type": "string",
-            "example": "Not Found"
-          }
-        },
-        "required": [
-          "statusCode",
-          "message",
-          "error"
-        ]
-      },
-      "ErrorConflictDto": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 409
-          },
-          "message": {
-            "type": "string",
-            "example": "Email already exists"
-          },
-          "error": {
-            "type": "string",
-            "example": "Conflict"
-          }
-        },
-        "required": [
-          "statusCode",
-          "message",
-          "error"
-        ]
-      },
-      "DeleteUserResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1
-          },
-          "message": {
-            "type": "string",
-            "example": "User successfully deleted."
-          }
-        },
-        "required": [
-          "id",
-          "message"
-        ]
-      }
-    }
-  }
+	"openapi": "3.0.0",
+	"paths": {
+		"/api/auth/login": {
+			"post": {
+				"operationId": "AuthController_login",
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/loginDto"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/loginResponseDto"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorUnauthorizedDto"
+								}
+							}
+						}
+					},
+					"429": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorTooManyRequestsDto"
+								}
+							}
+						}
+					}
+				},
+				"summary": "User login",
+				"tags": ["Auth"]
+			}
+		},
+		"/api/auth/request-reset-password": {
+			"post": {
+				"operationId": "AuthController_requestPasswordReset",
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RequestResetPasswordDto"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RequestResetPassworResponseDto"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorUnauthorizedDto"
+								}
+							}
+						}
+					}
+				},
+				"summary": "User request reset password",
+				"tags": ["Auth"]
+			}
+		},
+		"/api/auth/reset-password": {
+			"post": {
+				"operationId": "AuthController_resetPassword",
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ResetPasswordDto"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResetPassworResponseDto"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorBadRequestDto"
+								}
+							}
+						}
+					}
+				},
+				"summary": "User reset password",
+				"tags": ["Auth"]
+			}
+		},
+		"/api/users": {
+			"get": {
+				"operationId": "UsersController_findAll",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Liste des utilisateurs",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/UserResponseDto"
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorUnauthorizedDto"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorForbiddenDto"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearer": []
+					}
+				],
+				"summary": "Liste des utilisateurs",
+				"tags": ["Users"]
+			},
+			"post": {
+				"operationId": "UsersController_create",
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserDto"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Utilisateur créé avec succès",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserResponseDto"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorBadRequestDto"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorUnauthorizedDto"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorForbiddenDto"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearer": []
+					}
+				],
+				"summary": "Création d'utilistateur",
+				"tags": ["Users"]
+			}
+		},
+		"/api/users/profile": {
+			"get": {
+				"operationId": "UsersController_profile",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Utilisateur connecté",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserResponseDto"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorUnauthorizedDto"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearer": []
+					}
+				],
+				"summary": "Profil de l'utilistateur connecté",
+				"tags": ["Users"]
+			}
+		},
+		"/api/users/{id}": {
+			"put": {
+				"operationId": "UsersController_update",
+				"parameters": [
+					{
+						"name": "id",
+						"required": true,
+						"in": "path",
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateUserDto"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Utilisateur modifié avec succès",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserResponseDto"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorBadRequestDto"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorUnauthorizedDto"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorForbiddenDto"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorNotFoundDto"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorConflictDto"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearer": []
+					}
+				],
+				"summary": "Mise à jour d'un utilisateur",
+				"tags": ["Users"]
+			},
+			"delete": {
+				"operationId": "UsersController_delete",
+				"parameters": [
+					{
+						"name": "id",
+						"required": true,
+						"in": "path",
+						"schema": {
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "Utilisateur supprimer avec succès",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DeleteUserResponseDto"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorUnauthorizedDto"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorForbiddenDto"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorNotFoundDto"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearer": []
+					}
+				],
+				"summary": "Suppresion d'un utilisateur",
+				"tags": ["Users"]
+			}
+		},
+		"/api/hello": {
+			"get": {
+				"operationId": "AppController_getHello",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": ""
+					}
+				},
+				"summary": "Test de l'api",
+				"tags": ["Test de l'api"]
+			}
+		}
+	},
+	"info": {
+		"title": "nest-auth",
+		"description": "Documentation de mon API nest-auth",
+		"version": "1.0",
+		"contact": {}
+	},
+	"tags": [],
+	"servers": [],
+	"components": {
+		"securitySchemes": {
+			"bearer": {
+				"scheme": "bearer",
+				"bearerFormat": "JWT",
+				"type": "http"
+			}
+		},
+		"schemas": {
+			"loginDto": {
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string",
+						"description": "Adresse email utilisateur",
+						"example": "johndoe@gmail.com"
+					},
+					"password": {
+						"type": "string",
+						"example": "P@ssword123456"
+					}
+				},
+				"required": ["email", "password"]
+			},
+			"loginResponseDto": {
+				"type": "object",
+				"properties": {
+					"access_token": {
+						"type": "string",
+						"example": "token"
+					}
+				},
+				"required": ["access_token"]
+			},
+			"ErrorUnauthorizedDto": {
+				"type": "object",
+				"properties": {
+					"statusCode": {
+						"type": "number",
+						"example": 401
+					},
+					"message": {
+						"type": "string",
+						"example": "Unauthorized"
+					},
+					"error": {
+						"type": "string",
+						"example": "Unauthorized"
+					}
+				},
+				"required": ["statusCode", "message", "error"]
+			},
+			"ErrorTooManyRequestsDto": {
+				"type": "object",
+				"properties": {
+					"statusCode": {
+						"type": "number",
+						"example": 429
+					},
+					"message": {
+						"type": "string",
+						"example": "ThrottlerException: Too Many Requests"
+					},
+					"error": {
+						"type": "string",
+						"example": "Too Many Requests"
+					}
+				},
+				"required": ["statusCode", "message", "error"]
+			},
+			"RequestResetPasswordDto": {
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string",
+						"description": "Adresse email utilisateur",
+						"example": "johndoe@gmail.com"
+					}
+				},
+				"required": ["email"]
+			},
+			"RequestResetPassworResponseDto": {
+				"type": "object",
+				"properties": {
+					"resetToken": {
+						"type": "string",
+						"example": "token"
+					},
+					"message": {
+						"type": "string",
+						"example": "Un lien de réinitialisation a été envoyé."
+					}
+				},
+				"required": ["resetToken", "message"]
+			},
+			"ResetPasswordDto": {
+				"type": "object",
+				"properties": {
+					"token": {
+						"type": "string",
+						"example": "token"
+					},
+					"newPassword": {
+						"type": "string",
+						"example": "P@ssword123456"
+					}
+				},
+				"required": ["token", "newPassword"]
+			},
+			"ResetPassworResponseDto": {
+				"type": "object",
+				"properties": {
+					"message": {
+						"type": "string",
+						"example": "Mot de passe réinitialisé avec succès"
+					}
+				},
+				"required": ["message"]
+			},
+			"ErrorBadRequestDto": {
+				"type": "object",
+				"properties": {
+					"statusCode": {
+						"type": "number",
+						"example": 400
+					},
+					"message": {
+						"type": "string",
+						"example": "Bad Request"
+					},
+					"error": {
+						"type": "string",
+						"example": "Bad Request"
+					}
+				},
+				"required": ["statusCode", "message", "error"]
+			},
+			"UserResponseDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number",
+						"example": 1
+					},
+					"email": {
+						"type": "string",
+						"example": "john.doe@example.com"
+					},
+					"firstName": {
+						"type": "string",
+						"example": "John"
+					},
+					"lastName": {
+						"type": "string",
+						"example": "Doe"
+					},
+					"role": {
+						"type": "string",
+						"enum": ["Admin", "Member"],
+						"example": "Member"
+					},
+					"createdAt": {
+						"format": "date-time",
+						"type": "string",
+						"example": "2024-01-01T10:00:00.000Z"
+					},
+					"updatedAt": {
+						"format": "date-time",
+						"type": "string",
+						"example": "2024-01-01T10:00:00.000Z"
+					}
+				},
+				"required": [
+					"id",
+					"email",
+					"firstName",
+					"lastName",
+					"role",
+					"createdAt",
+					"updatedAt"
+				]
+			},
+			"ErrorForbiddenDto": {
+				"type": "object",
+				"properties": {
+					"statusCode": {
+						"type": "number",
+						"example": 403
+					},
+					"message": {
+						"type": "string",
+						"example": "Forbidden"
+					},
+					"error": {
+						"type": "string",
+						"example": "Forbidden"
+					}
+				},
+				"required": ["statusCode", "message", "error"]
+			},
+			"CreateUserDto": {
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string",
+						"example": "john@mail.com"
+					},
+					"firstName": {
+						"type": "string",
+						"example": "John"
+					},
+					"lastName": {
+						"type": "string",
+						"example": "Doe"
+					},
+					"role": {
+						"type": "string",
+						"example": "Member"
+					},
+					"isActive": {
+						"type": "boolean",
+						"example": true
+					}
+				},
+				"required": ["email", "firstName", "lastName", "role", "isActive"]
+			},
+			"UpdateUserDto": {
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string",
+						"example": "john@mail.com"
+					},
+					"firstName": {
+						"type": "string",
+						"example": "John"
+					},
+					"lastName": {
+						"type": "string",
+						"example": "Doe"
+					},
+					"role": {
+						"type": "string",
+						"example": "Member"
+					},
+					"isActive": {
+						"type": "boolean",
+						"example": true
+					}
+				}
+			},
+			"ErrorNotFoundDto": {
+				"type": "object",
+				"properties": {
+					"statusCode": {
+						"type": "number",
+						"example": 404
+					},
+					"message": {
+						"type": "string",
+						"example": "Resource not found"
+					},
+					"error": {
+						"type": "string",
+						"example": "Not Found"
+					}
+				},
+				"required": ["statusCode", "message", "error"]
+			},
+			"ErrorConflictDto": {
+				"type": "object",
+				"properties": {
+					"statusCode": {
+						"type": "number",
+						"example": 409
+					},
+					"message": {
+						"type": "string",
+						"example": "Email already exists"
+					},
+					"error": {
+						"type": "string",
+						"example": "Conflict"
+					}
+				},
+				"required": ["statusCode", "message", "error"]
+			},
+			"DeleteUserResponseDto": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number",
+						"example": 1
+					},
+					"message": {
+						"type": "string",
+						"example": "User successfully deleted."
+					}
+				},
+				"required": ["id", "message"]
+			}
+		}
+	}
 }
