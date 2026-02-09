@@ -77,6 +77,10 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'DATABASE_URL', variable: 'DATABASE_URL')]) {
           withEnv(["NODE_ENV=${env.NODE_ENV}"]) {
+
+            echo "Running Formatter..."
+            sh 'npx biome check .'
+
             echo "Running linter..."
             sh 'npx biome lint'
 

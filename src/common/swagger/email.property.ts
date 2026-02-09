@@ -1,7 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 
 export const ApiEmailProperty = () =>
-  ApiProperty({
-    description: 'Adresse email utilisateur',
-    example: 'johndoe@gmail.com',
-  });
+	ApiProperty({
+		description: "Adresse email utilisateur",
+		example: "johndoe@gmail.com",
+	});

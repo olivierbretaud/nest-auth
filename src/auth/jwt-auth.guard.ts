@@ -1,19 +1,28 @@
-import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { UserAuth } from './types/auth';
+import {
+	ExecutionContext,
+	Injectable,
+	UnauthorizedException,
+} from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
+import { UserAuth } from "./types/auth";
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
-  canActivate(context: ExecutionContext) {
-    // Ajouter une gestion d'erreur personnalisée
-    return super.canActivate(context);
-  }
+export class JwtAuthGuard extends AuthGuard("jwt") {
+	canActivate(context: ExecutionContext) {
+		// Ajouter une gestion d'erreur personnalisée
+		return super.canActivate(context);
+	}
 
-  handleRequest<TUser = UserAuth>(err: Error, user: TUser | null) {
-    // Vous pouvez lancer une exception basée sur "info" ou "err"
-    if (err || !user) {
-      throw err || new UnauthorizedException('Token invalide ou manquant. Utilisez le format: Authorization: Bearer <token>');
-    }
-    return user;
-  }
+	handleRequest<TUser = UserAuth>(err: Error, user: TUser | null) {
+		// Vous pouvez lancer une exception basée sur "info" ou "err"
+		if (err || !user) {
+			throw (
+				err ||
+				new UnauthorizedException(
+					"Token invalide ou manquant. Utilisez le format: Authorization: Bearer <token>",
+				)
+			);
+		}
+		return user;
+	}
 }
