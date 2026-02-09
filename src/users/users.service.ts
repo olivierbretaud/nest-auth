@@ -62,7 +62,7 @@ export class UsersService {
   updatePassword(userId: number, hashedPassword: string) {
     return this.prisma.user.update({
       where: { id: userId },
-      data: { password: hashedPassword },
+      data: { password: hashedPassword, updatedAt: new Date() },
       select: selectUser,
     });
   }
@@ -70,7 +70,10 @@ export class UsersService {
   update(userId: number, updateUserDto: UpdateUserDto) {
     return this.prisma.user.update({
       where: { id: userId },
-      data: updateUserDto,
+      data: {
+        ...updateUserDto,
+        updatedAt: new Date(),
+      },
       select: selectUser,
     });
   }
