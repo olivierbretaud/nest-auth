@@ -9,7 +9,7 @@ export class RequestResetPasswordDto {
   email: string;
 }
 
-export class ResetPassworResponseDto {
+export class RequestResetPassworResponseDto {
   @ApiProperty({
     example: 'token',
   })

@@ -21,6 +21,17 @@ type ErrorCode =
     error: string;
   }
 
+  export class ErrorBadRequestDto {
+    @ApiProperty({ example: 400 })
+    statusCode: number;
+  
+    @ApiProperty({ example: 'Invalid credentials' })
+    message: string;
+  
+    @ApiProperty({ example: 'Bad Request' })
+    error: string;
+  }
+
 
   export class ErrorResponseDto {
     @ApiProperty({ example: 401 })
@@ -37,7 +48,7 @@ export const ApiErrors = (...errors: ErrorCode[]) => {
   const decorators = [];
 
   if (errors.includes('BAD_REQUEST'))
-    decorators.push(ApiBadRequestResponse({ type: ErrorResponseDto }));
+    decorators.push(ApiBadRequestResponse({ type: ErrorBadRequestDto }));
 
   if (errors.includes('UNAUTHORIZED'))
     decorators.push(ApiUnauthorizedResponse({ type: ErrorUnauthorizedDto }));

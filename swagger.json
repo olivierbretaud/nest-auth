@@ -63,7 +63,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResetPassworResponseDto"
+                  "$ref": "#/components/schemas/RequestResetPassworResponseDto"
                 }
               }
             }
@@ -100,8 +100,25 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPassworResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequestDto"
+                }
+              }
+            }
           }
         },
         "summary": "User reset password",
@@ -270,7 +287,7 @@
           "email"
         ]
       },
-      "ResetPassworResponseDto": {
+      "RequestResetPassworResponseDto": {
         "type": "object",
         "properties": {
           "resetToken": {
@@ -302,6 +319,40 @@
         "required": [
           "token",
           "newPassword"
+        ]
+      },
+      "ResetPassworResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Mot de passe réinitialisé avec succès"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "ErrorBadRequestDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid credentials"
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message",
+          "error"
         ]
       },
       "CreateUserDto": {

@@ -22,3 +22,10 @@ export class ResetPasswordDto {
   })
   newPassword: string;
 }
+
+export class ResetPassworResponseDto {
+  @ApiProperty({
+    example: 'Mot de passe réinitialisé avec succès',
+  })
+  message: string;
+}
