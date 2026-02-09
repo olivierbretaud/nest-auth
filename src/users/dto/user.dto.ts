@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import { IsBoolean,  IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 import { UserRole } from '../enums/user-role.enum';
 
 export class CreateUserDto {
@@ -20,6 +20,11 @@ export class CreateUserDto {
   @IsOptional()
   @ApiProperty({ example: UserRole.MEMBER })
   role: string = UserRole.MEMBER;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty({ example: true })
+  isActive: boolean = true;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

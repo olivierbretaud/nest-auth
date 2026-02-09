@@ -661,13 +661,18 @@
           "role": {
             "type": "string",
             "example": "Member"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
           }
         },
         "required": [
           "email",
           "firstName",
           "lastName",
-          "role"
+          "role",
+          "isActive"
         ]
       },
       "UpdateUserDto": {
@@ -688,6 +693,10 @@
           "role": {
             "type": "string",
             "example": "Member"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
           }
         }
       },

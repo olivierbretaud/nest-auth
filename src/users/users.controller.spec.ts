@@ -159,11 +159,12 @@ describe('UsersController', () => {
   });
 
   describe('create', () => {
-    const mockCreateUserDto: CreateUserDto = {
+    const mockCreateUserDto : CreateUserDto = {
       email: 'newuser@example.com',
       firstName: 'New',
       lastName: 'User',
       role: UserRole.MEMBER,
+      isActive: true,
     };
 
     const mockCreatedUser = {
@@ -210,21 +211,72 @@ describe('UsersController', () => {
       expect(service.findByEmail).toHaveBeenCalledWith(mockCreateUserDto.email);
       expect(createSpy).not.toHaveBeenCalled();
     });
+  });
 
-    it('should hash the password before creating user', async () => {
-      jest.spyOn(service, 'findByEmail').mockResolvedValue(null);
+  describe('update', () => {
+    const mockUpdateUserDto : CreateUserDto = {
+      email: 'newuser@example.com',
+      firstName: 'New',
+      lastName: 'User',
+      role: UserRole.MEMBER,
+      isActive: true,
+    };
 
-      jest.spyOn(service, 'create').mockResolvedValue(mockCreatedUser as any);
+    const mockUpdateUser = {
+      id: 3,
+      email: 'newuser@example.com',
+      firstName: 'New',
+      lastName: 'User',
+      role: UserRole.MEMBER,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-      await controller.create(mockCreateUserDto);
+    it('should update a user successfully', async () => {
+      jest.spyOn(service, 'findById').mockResolvedValue(mockUpdateUser as any);
+      jest.spyOn(service, 'update').mockResolvedValue(mockUpdateUser as any);
 
-      expect(service.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          email: mockCreateUserDto.email,
-          firstName: mockCreateUserDto.firstName,
-          lastName: mockCreateUserDto.lastName,
-        }),
-      );
+      const result = await controller.update( mockUpdateUser.id ,mockUpdateUserDto);
+
+      expect(service.findById).toHaveBeenCalledWith(mockUpdateUser.id);
+      expect(service.update).toHaveBeenCalled();
+      expect(result.email).toBe(mockUpdateUserDto.email);
+      expect(result.firstName).toBe(mockUpdateUserDto.firstName);
+    });
+
+    it('should throw ConflictException when email already exists', async () => {
+      const existingUser = {
+        id: 1,
+        email: 'newuser@example.com',
+        firstName: 'Existing',
+        lastName: 'User',
+        password: 'hashed',
+        role: UserRole.MEMBER,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isActive: true,
+      };
+
+      const mockUpdateUser = {
+        id: 3,
+        email: 'newuser@example.com',
+        firstName: 'New',
+        lastName: 'User',
+        role: UserRole.MEMBER,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      jest.spyOn(service, 'findByEmail').mockResolvedValue(existingUser as any);
+      jest.spyOn(service, 'findById').mockResolvedValue(mockUpdateUser as any);
+      const createSpy = jest.spyOn(service, 'update').mockResolvedValue(mockUpdateUser as any);
+
+      await expect(
+        controller.update(mockUpdateUser.id, mockUpdateUserDto),
+      ).rejects.toThrow('Email already exists');
+
+      expect(service.findByEmail).toHaveBeenCalledWith(mockUpdateUserDto.email);
+      expect(createSpy).not.toHaveBeenCalled();
     });
   });
 });
