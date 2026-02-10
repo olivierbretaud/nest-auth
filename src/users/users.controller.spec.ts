@@ -10,7 +10,6 @@ import { mockUsers } from "./mock/users";
 
 dotenv.config();
 
-
 describe("UsersController", () => {
 	let controller: UsersController;
 	let service: UsersService;
@@ -26,7 +25,7 @@ describe("UsersController", () => {
 						user: {
 							findMany: jest.fn(),
 							findUnique: jest.fn(),
-              findPaginated: jest.fn(),
+							findPaginated: jest.fn(),
 							create: jest.fn(),
 							delete: jest.fn(),
 						},

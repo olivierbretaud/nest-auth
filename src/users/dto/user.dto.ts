@@ -62,9 +62,9 @@ export class UserResponseDto {
 }
 
 export class UserPaginationResponsDto {
-  @ApiProperty({ example: UserResponseDto })
-  users: [UserResponseDto]
-  meta: PaginationMetoDto
+	@ApiProperty({ example: UserResponseDto })
+	users: [UserResponseDto];
+	meta: PaginationMetoDto;
 }
 
 export class DeleteUserResponseDto {
@@ -116,22 +116,22 @@ export class UserQueryDto {
 
 	@IsOptional()
 	@IsString()
-  @ApiPropertyOptional({
-    description: 'Global search on email, firstName and lastName',
-  })
+	@ApiPropertyOptional({
+		description: "Global search on email, firstName and lastName",
+	})
 	search?: string;
 
 	@IsOptional()
 	@Type(() => Boolean)
 	@IsBoolean()
-  @ApiPropertyOptional({
+	@ApiPropertyOptional({
 		description: "Filtre par compte actif",
 	})
 	isActive?: boolean;
 
 	@IsOptional()
 	@IsString()
-  @ApiPropertyOptional({
+	@ApiPropertyOptional({
 		enum: UserRole,
 		description: "Filtre par rôle",
 	})
