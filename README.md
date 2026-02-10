@@ -184,6 +184,10 @@ POSTGRES_USER="test"
 POSTGRES_PASSWORD="test"
 POSTGRES_DB="test_db"
 NODE_ENV='production'
+
+Recharger le code et relancer les containers si nécessaire :
+```bash
+docker-compose up -d --build
 ```
 
 Démarrer tous les services :
