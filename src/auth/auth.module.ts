@@ -9,15 +9,21 @@ import { UsersService } from "../users/users.service";
 import { PrismaService } from "../../prisma/prisma.service";
 
 @Module({
-  imports: [
-    PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secret_key',
-      signOptions: { expiresIn: '1h' },
-    }),
-  ],
-  providers: [AuthService, UsersService, PrismaService, JwtStrategy, JwtAuthGuard],
-  exports: [JwtAuthGuard, AuthService, JwtStrategy],
-  controllers: [AuthController],
+	imports: [
+		PassportModule,
+		JwtModule.register({
+			secret: process.env.JWT_SECRET || "secret_key",
+			signOptions: { expiresIn: "1h" },
+		}),
+	],
+	providers: [
+		AuthService,
+		UsersService,
+		PrismaService,
+		JwtStrategy,
+		JwtAuthGuard,
+	],
+	exports: [JwtAuthGuard, AuthService, JwtStrategy],
+	controllers: [AuthController],
 })
 export class AuthModule {}
