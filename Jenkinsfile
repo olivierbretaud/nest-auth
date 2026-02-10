@@ -63,6 +63,9 @@ pipeline {
               // Installer les dépendances
               sh 'pnpm install --frozen-lockfile'
 
+              // Approuver tous les scripts de build ignorés (pour Prisma, bcrypt, etc.)
+              sh 'pnpm approve-builds'
+
               // Générer Prisma
               sh 'npx prisma generate'
 
@@ -77,8 +80,12 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'DATABASE_URL', variable: 'DATABASE_URL')]) {
           withEnv(["NODE_ENV=${env.NODE_ENV}"]) {
+
+            echo "Running Formatter..."
+            sh 'npx biome format . --write'
+
             echo "Running linter..."
-            sh 'npx biome lint'
+            sh 'npx biome lint .'
 
             echo "Running tests..."
             sh 'npm test'
