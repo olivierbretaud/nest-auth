@@ -10,3 +10,16 @@ export interface IUser {
 	updatedAt: Date;
 	isActive: boolean;
 }
+
+export interface UserQueryParams {
+	page?: number;
+	limit?: number;
+	search?: string;
+	sortBy?: keyof IUser;
+	sortOrder?: "asc" | "desc";
+	email?: string;
+	firstName?: string;
+	lastName?: string;
+	role?: string;
+	isActive?: boolean;
+}

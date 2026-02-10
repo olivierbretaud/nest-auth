@@ -6,35 +6,14 @@ import { UsersService } from "./users.service";
 import { PrismaService } from "../../prisma/prisma.service";
 import type { CreateUserDto } from "./dto/user.dto";
 import { UserRole } from "./enums/user-role.enum";
+import { mockUsers } from "./mock/users";
 
 dotenv.config();
+
 
 describe("UsersController", () => {
 	let controller: UsersController;
 	let service: UsersService;
-
-	const mockUsers = [
-		{
-			id: 1,
-			email: "user1@example.com",
-			firstName: "John",
-			lastName: "Doe",
-			role: UserRole.MEMBER,
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			isActive: true,
-		},
-		{
-			id: 2,
-			email: "user2@example.com",
-			firstName: "Jane",
-			lastName: "Smith",
-			role: "Admin",
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			isActive: true,
-		},
-	];
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -47,6 +26,7 @@ describe("UsersController", () => {
 						user: {
 							findMany: jest.fn(),
 							findUnique: jest.fn(),
+              findPaginated: jest.fn(),
 							create: jest.fn(),
 							delete: jest.fn(),
 						},

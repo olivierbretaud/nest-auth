@@ -11,6 +11,7 @@ import {
 	NotFoundException,
 	Param,
 	Delete,
+	Query,
 } from "@nestjs/common";
 import {
 	ApiTags,
@@ -25,6 +26,8 @@ import { UsersService } from "./users.service";
 import {
 	CreateUserDto,
 	DeleteUserResponseDto,
+	UserPaginationResponsDto,
+	UserQueryDto,
 	UserResponseDto,
 } from "./dto/user.dto";
 import { RolesGuard } from "../auth/roles.guard";
@@ -55,6 +58,23 @@ export class UsersController {
 	async findAll() {
 		const users = await this.usersService.findAll();
 		return { users };
+	}
+
+	@Get("paginated")
+	@Roles(UserRole.ADMIN)
+	@ApiBearerAuth()
+	@ApiOperation({
+		summary: "Liste des utilisateurs avec pagination, recherches et tris",
+	})
+	@ApiErrors("FORBIDDEN", "UNAUTHORIZED")
+	@ApiResponse({
+		description: "Liste des utilisateurs paginé",
+		status: 200,
+		type: UserPaginationResponsDto,
+	})
+	async findPaginated(@Query() query: UserQueryDto) {
+		const usersWithMeta = await this.usersService.findPaginated(query);
+		return usersWithMeta;
 	}
 
 	@Get("profile")

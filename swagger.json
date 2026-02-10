@@ -252,6 +252,136 @@
         ]
       }
     },
+    "/api/users/paginated": {
+      "get": {
+        "operationId": "UsersController_findPaginated",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Numéro de page",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Nombre d'éléments par page",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Propriété triée",
+            "schema": {
+              "example": "createdAt",
+              "type": "string",
+              "enum": [
+                "createdAt",
+                "updatedAt",
+                "email",
+                "firstName",
+                "lastName"
+              ]
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "description": "Direction du tri",
+            "schema": {
+              "example": "desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Global search on email, firstName and lastName",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isActive",
+            "required": false,
+            "in": "query",
+            "description": "Filtre par compte actif",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "role",
+            "required": false,
+            "in": "query",
+            "description": "Filtre par rôle",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Admin",
+                "Member"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des utilisateurs paginé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPaginationResponsDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorizedDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForbiddenDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Liste des utilisateurs avec pagination, recherches et tris",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/api/users/profile": {
       "get": {
         "operationId": "UsersController_profile",
@@ -705,6 +835,20 @@
           "statusCode",
           "message",
           "error"
+        ]
+      },
+      "UserPaginationResponsDto": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "users"
         ]
       },
       "CreateUserDto": {
