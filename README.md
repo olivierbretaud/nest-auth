@@ -113,17 +113,13 @@ pnpm run build
 pnpm run start:prod
 ```
 
-L’API sera disponible sur `http://localhost:3000` (par défaut).
+L’API sera disponible sur `http://localhost:3000/api` (par défaut).
 
 ---
 
 ## Documentation Swagger
 
-Selon la configuration de `main.ts`, la documentation Swagger est généralement exposée sur une route du type :
-
-- **Swagger UI** : `http://localhost:3000/api` (ou similaire)
-
-Consultez le fichier `main.ts` pour l’URL exacte.
+- **Swagger UI** : `http://localhost:3000/api/docs` (ou similaire)
 
 ---
 
@@ -141,7 +137,7 @@ Consultez le fichier `main.ts` pour l’URL exacte.
 
 - **Users** (protégé par `JwtAuthGuard` + `RolesGuard`)
   - `GET /users` (role `ADMIN`)
-  - `GET /users/me` (utilisateur connecté)
+  - `GET /users/profile` (utilisateur connecté)
   - `POST /users` (role `ADMIN`) — création d’utilisateur
 
 ---
@@ -171,3 +167,44 @@ Consultez le fichier `main.ts` pour l’URL exacte.
 ## Licence
 
 Ce boilerplate est fourni tel quel dans le cadre du projet `nest-auth`. Adapter la licence selon vos besoins (actuellement `UNLICENSED` dans `package.json`).
+
+
+## Environnement de build Jenkins
+
+
+Configurer ensuite les variables d’environnement (fichier `.env.production.local` à la racine, par exemple) :
+
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/nest_auth_db"
+JWT_SECRET="change-me"
+NODE_ENV="development"
+POSTMAN_API_KEY="api-key"
+POSTMAN_COLLECTION_UID="collectionId"
+POSTGRES_USER="test"
+POSTGRES_PASSWORD="test"
+POSTGRES_DB="test_db"
+NODE_ENV='production'
+```
+
+Démarrer tous les services :
+```bash
+docker-compose up -d
+```
+
+Arrêter tous les services :
+```bash
+docker-compose down
+```
+
+Arrêter tous les services :
+```bash
+docker-compose logs -f <service_name>
+```
+
+Construire les images sans démarrer les containers :
+```bash
+docker-compose build
+```
+
+L’interface Jenkins sera disponible sur `http://localhost:8080`.
+

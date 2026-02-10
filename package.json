@@ -2,7 +2,7 @@
 	"name": "nest-auth",
 	"version": "0.0.1",
 	"description": "",
-	"author": "",
+	"author": "Olivier Bretaud",
 	"private": true,
 	"license": "UNLICENSED",
 	"scripts": {
