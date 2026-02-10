@@ -64,7 +64,7 @@ pipeline {
               sh 'pnpm install --frozen-lockfile'
 
               // Approuver tous les scripts de build ignorés (pour Prisma, bcrypt, etc.)
-              sh 'pnpm approve-builds --all'
+              sh 'pnpm approve-builds'
 
               // Générer Prisma
               sh 'npx prisma generate'
